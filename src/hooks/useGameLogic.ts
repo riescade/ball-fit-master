@@ -100,7 +100,7 @@ export const useGameLogic = () => {
     }));
   }, []);
 
-  const placePiece = useCallback((pieceId: string, position: { x: number; y: number }): boolean => {
+  const placePiece = useCallback((pieceId: string, position: { x: number; y: number }, rotation: number = 0): boolean => {
     const currentLevel = PuzzleLevels[gameState.currentLevel];
     if (!currentLevel) return false;
 
@@ -127,7 +127,7 @@ export const useGameLogic = () => {
     const newPlacedPiece: PlacedPiece = {
       pieceId,
       position,
-      rotation: 0,
+      rotation,
       color: piece.color
     };
 

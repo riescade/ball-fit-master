@@ -26,8 +26,11 @@ export const KanoodleGame = () => {
     removePiece
   } = useGameLogic();
 
-  const handlePiecePlace = useCallback((pieceId: string, position: { x: number; y: number }) => {
-    const success = placePiece(pieceId, position);
+  const [selectedPiece, setSelectedPiece] = useState<string | null>(null);
+  const [draggedPiece, setDraggedPiece] = useState<string | null>(null);
+
+  const handlePiecePlace = useCallback((pieceId: string, position: { x: number; y: number }, rotation: number = 0) => {
+    const success = placePiece(pieceId, position, rotation);
     if (success) {
       if (soundEnabled) {
         // Play snap sound effect
@@ -36,19 +39,44 @@ export const KanoodleGame = () => {
         audio.play().catch(() => {}); // Ignore audio errors
       }
       toast.success('Peça encaixada!');
+      setSelectedPiece(null);
     } else {
       toast.error('Posição inválida!');
     }
   }, [placePiece, soundEnabled]);
+
+  const handlePieceRemove = useCallback((pieceId: string) => {
+    removePiece(pieceId);
+    if (soundEnabled) {
+      // Play remove sound effect  
+      const audio = new Audio('data:audio/wav;base64,UklGRqgCAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YYQCAABqOhEqmw4/DWMQKws=');
+      audio.volume = 0.2;
+      audio.play().catch(() => {});
+    }
+    toast.info('Peça removida');
+  }, [removePiece, soundEnabled]);
 
   const handleStartGame = useCallback(() => {
     startGame();
     toast.success(`Desafio ${currentLevel + 1} iniciado!`);
   }, [startGame, currentLevel]);
 
+  const handlePieceSelect = useCallback((pieceId: string) => {
+    setSelectedPiece(pieceId);
+  }, []);
+
+  const handleDragStart = useCallback((pieceId: string) => {
+    setDraggedPiece(pieceId);
+    setSelectedPiece(pieceId);
+  }, []);
+
+  const handleDragEnd = useCallback(() => {
+    setDraggedPiece(null);
+  }, []);
+
   useEffect(() => {
     if (isComplete) {
-      toast.success(`Parabéns! Nível ${currentLevel + 1} completo em ${Math.floor(timeElapsed / 60)}:${(timeElapsed % 60).toString().padStart(2, '0')}!`);
+      toast.success(`🎉 Parabéns! Nível ${currentLevel + 1} completo em ${Math.floor(timeElapsed / 60)}:${(timeElapsed % 60).toString().padStart(2, '0')}!`);
     }
   }, [isComplete, currentLevel, timeElapsed]);
 
@@ -82,18 +110,21 @@ export const KanoodleGame = () => {
           <GamePieces
             gameState={gameState}
             placedPieces={placedPieces}
-            onPieceSelect={(pieceId) => console.log('Selected piece:', pieceId)}
+            currentLevel={currentLevel}
+            onPieceSelect={handlePieceSelect}
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
           />
         </div>
 
         {/* Game Board */}
-        <div className="flex-1 flex items-center justify-center">
+        <div className="flex-1 flex items-center justify-center relative">
           <GameBoard
             level={PuzzleLevels[currentLevel]}
             placedPieces={placedPieces}
             gameState={gameState}
             onPiecePlace={handlePiecePlace}
-            onPieceRemove={removePiece}
+            onPieceRemove={handlePieceRemove}
           />
         </div>
 
@@ -106,6 +137,14 @@ export const KanoodleGame = () => {
             <div>Objetivo: Preencher todo o tabuleiro</div>
           </div>
           
+          {selectedPiece && (
+            <div className="mt-4 p-3 bg-cyan-400/20 border border-cyan-400/30 rounded-lg">
+              <div className="digital-text text-cyan-400 text-center text-xs">
+                Peça selecionada: {selectedPiece}
+              </div>
+            </div>
+          )}
+          
           {isComplete && (
             <div className="mt-4 p-3 bg-green-500/20 border border-green-500/30 rounded-lg">
               <div className="digital-text text-green-400 text-center">
@@ -113,6 +152,19 @@ export const KanoodleGame = () => {
               </div>
             </div>
           )}
+
+          {/* Progress indicator */}
+          <div className="mt-4">
+            <div className="digital-text text-xs mb-2">Progresso</div>
+            <div className="w-full bg-gray-700 rounded-full h-3">
+              <div 
+                className="bg-gradient-to-r from-green-500 to-cyan-400 h-3 rounded-full transition-all duration-500"
+                style={{ 
+                  width: `${PuzzleLevels[currentLevel] ? ((placedPieces.length / PuzzleLevels[currentLevel].pieces.length) * 100) : 0}%` 
+                }}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>
