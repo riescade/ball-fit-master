@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { GamePiece, PlacedPiece } from '../types/GameTypes';
+import { PuzzleLevels } from './PuzzleLevels';
 
 interface DraggablePieceProps {
   piece: GamePiece;
@@ -166,8 +167,6 @@ export const GamePieces: React.FC<GamePiecesProps> = ({
   onDragStart,
   onDragEnd
 }) => {
-  // Import puzzle levels
-  const { PuzzleLevels } = require('./PuzzleLevels');
   const level = PuzzleLevels[currentLevel];
   
   const isPiecePlaced = (pieceId: string) => {
