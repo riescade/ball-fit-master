@@ -44,7 +44,7 @@ export const PuzzleLevels: PuzzleLevel[] = [
       {
         id: "piece-5",
         name: "Z",
-        color: "purple",
+        color: "orange",
         shape: [
           [1, 1, 0],
           [0, 1, 1]
@@ -53,7 +53,7 @@ export const PuzzleLevels: PuzzleLevel[] = [
       {
         id: "piece-6",
         name: "T",
-        color: "orange",
+        color: "cyan",
         shape: [
           [1, 1, 1],
           [0, 1, 0]

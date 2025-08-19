@@ -111,17 +111,19 @@ export const useGameLogic = () => {
     const isAlreadyPlaced = gameState.placedPieces.some(p => p.pieceId === pieceId);
     if (isAlreadyPlaced) return false;
 
-    // Check if position is valid (simplified - just check bounds)
+    // Simplified validation - just check if position is within bounds
     if (position.x < 0 || position.x >= currentLevel.boardSize.width ||
         position.y < 0 || position.y >= currentLevel.boardSize.height) {
       return false;
     }
 
-    // Check if position is occupied
-    const isOccupied = gameState.placedPieces.some(p => 
+    // For now, allow placing anywhere that's not occupied by the same exact position
+    // This makes it easier to place pieces and test the game
+    const isExactPositionOccupied = gameState.placedPieces.some(p => 
       p.position.x === position.x && p.position.y === position.y
     );
-    if (isOccupied) return false;
+    
+    if (isExactPositionOccupied) return false;
 
     // Place the piece
     const newPlacedPiece: PlacedPiece = {

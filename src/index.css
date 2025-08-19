@@ -21,17 +21,17 @@
     --panel-text: 120 100% 80%;
     --panel-border: 120 50% 25%;
     
-    /* Game Piece Colors */
-    --piece-red: 0 85% 60%;
-    --piece-yellow: 45 95% 55%;
-    --piece-blue: 220 90% 60%;
-    --piece-green: 120 75% 50%;
-    --piece-orange: 25 95% 60%;
-    --piece-purple: 280 80% 65%;
-    --piece-pink: 320 75% 70%;
-    --piece-gray: 210 10% 60%;
-    --piece-white: 0 0% 90%;
-    --piece-cyan: 180 85% 55%;
+    /* Game Piece Colors - Based on Kanoodle reference images */
+    --piece-red: 0 90% 55%;        /* Bright red like in images */
+    --piece-yellow: 50 100% 50%;   /* Vibrant yellow */
+    --piece-blue: 220 85% 55%;     /* Royal blue */
+    --piece-green: 120 85% 45%;    /* Bright green */
+    --piece-orange: 25 100% 55%;   /* Orange */
+    --piece-purple: 280 85% 60%;   /* Purple/violet */
+    --piece-pink: 320 85% 65%;     /* Hot pink */
+    --piece-gray: 210 15% 70%;     /* Light gray */
+    --piece-white: 0 0% 95%;       /* Off-white */
+    --piece-cyan: 180 90% 50%;     /* Bright cyan/turquoise */
     
     /* Button Colors */
     --button-red: 0 85% 60%;

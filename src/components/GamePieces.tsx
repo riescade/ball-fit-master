@@ -81,11 +81,11 @@ const DraggablePiece: React.FC<DraggablePieceProps> = ({
       className={`
         p-3 rounded-lg border-2 transition-all duration-200 select-none
         ${isPlaced 
-          ? 'border-gray-600 bg-gray-800/50 opacity-50' 
-          : 'border-gray-500 bg-gray-700/30 hover:border-cyan-400 hover:bg-cyan-400/10'
+          ? 'border-green-500/50 bg-green-500/10 opacity-75' 
+          : 'border-cyan-400/50 bg-cyan-400/5 hover:border-cyan-400 hover:bg-cyan-400/10'
         }
-        ${!isDisabled ? 'cursor-grab hover:scale-105' : 'cursor-not-allowed'}
-        ${isDragging ? 'opacity-50 scale-110 cursor-grabbing' : ''}
+        ${!isDisabled && !isPlaced ? 'cursor-grab hover:scale-105' : 'cursor-not-allowed'}
+        ${isDragging ? 'opacity-70 scale-110 cursor-grabbing' : ''}
       `}
       draggable={!isDisabled}
       onDragStart={handleDragStart}
@@ -106,10 +106,7 @@ const DraggablePiece: React.FC<DraggablePieceProps> = ({
                   key={`${x}-${y}`}
                   className={`
                     w-5 h-5 rounded-full border-2 transition-all duration-200
-                    ${isPlaced 
-                      ? `piece-${piece.color} opacity-100`
-                      : 'bg-gray-400 border-gray-300 opacity-60'
-                    }
+                    game-piece piece-${piece.color}
                     ${isDragging ? 'animate-pulse' : ''}
                   `}
                 />

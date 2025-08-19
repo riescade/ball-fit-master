@@ -61,20 +61,34 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       const data = e.dataTransfer.getData('text/plain');
       const pieceData = JSON.parse(data);
       
-      onPiecePlace(pieceData.pieceId, { x, y }, pieceData.rotation || 0);
+      console.log('Dropping piece:', pieceData, 'at position:', { x, y });
+      const success = onPiecePlace(pieceData.pieceId, { x, y }, pieceData.rotation || 0);
+      console.log('Drop success:', success);
     } catch (error) {
       console.error('Error handling drop:', error);
     }
   }, [gameState, onPiecePlace]);
 
   const isPieceAtPosition = useCallback((x: number, y: number) => {
-    return placedPieces.some(piece => piece.position.x === x && piece.position.y === y);
+    // Check if any part of any placed piece occupies this position
+    return placedPieces.some(piece => {
+      // For now, simplified - each piece only occupies its center position
+      // In a more complex implementation, we'd calculate all positions based on shape
+      return piece.position.x === x && piece.position.y === y;
+    });
   }, [placedPieces]);
 
   const getPieceColorAtPosition = useCallback((x: number, y: number) => {
-    const piece = placedPieces.find(piece => piece.position.x === x && piece.position.y === y);
+    const piece = placedPieces.find(piece => 
+      piece.position.x === x && piece.position.y === y
+    );
     return piece?.color || 'gray';
   }, [placedPieces]);
+
+  const canPlacePieceAt = useCallback((x: number, y: number) => {
+    // Simple check - just see if the exact position is free
+    return !isPieceAtPosition(x, y);
+  }, [isPieceAtPosition]);
 
   if (!level) {
     return (
